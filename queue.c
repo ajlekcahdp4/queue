@@ -1,6 +1,5 @@
 #include "queue.h"
-#include <stdio.h>
-#include <stdlib.h>
+
 
 void QCtor(Queue* que, unsigned int capacity, char* Qname)
 {
@@ -13,6 +12,8 @@ void QCtor(Queue* que, unsigned int capacity, char* Qname)
 
 void QPushB (Queue* que, int val)
 {
+    if (que->bp == que->capacity)
+        QResize (que, 2*que->capacity);
     que->data[que->bp] = val;
     que->bp += 1;
     QCheck (que);
@@ -35,11 +36,38 @@ void QDtor (Queue* que)
 
 int QCheck (Queue* que)
 {
-    if (que->fp > que->bf)
+    if (que->fp > que->bp)
+    {
         fprintf(que->logfile, "ERROR: queue underflow\n");
+        return 1;
+    }
     if (que->fp < 0 )
+    {
         fprintf (que->logfile, "ERROR: wrong front pointer\n");
-    if (que->bf < 0)
+        return 2;
+    }
+    if (que->bp < 0)
+    {
         fprintf (que->logfile, "ERROR: wrong back pointer\n");
-        
+        return 3;
+    }
+    return 0;
+}
+
+void QResize (Queue* que, unsigned int capacity)
+{
+    int* temp_data = (int*)calloc(que->capacity, sizeof(int));
+    memcpy (que->data, temp_data, que->capacity);
+    que->data = realloc (que->data, capacity);
+    int i = 0;
+    while (i < capacity)
+    {
+        if (i < que->fp)
+            que->data[i] = 0;
+        else if (i >= que->bp)
+            que->data[i] = 0;
+    }
+    memcpy (temp_data, que->data, que->capacity);
+    que->capacity = capacity;
+    free(temp_data);
 }

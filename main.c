@@ -6,20 +6,20 @@ int main ()
 {
     Queue *que = (Queue*)calloc(1, sizeof(Queue));
     int x = 0;
-    QueCtor (que, 10);
-    QuePushB (que, 1);
-    QuePushB (que, 2);
-    QuePushB (que, 3);
+    QCtor (que, 10, "first_que");
+    QPushB (que, 1);
+    QPushB (que, 2);
+    QPushB (que, 3);
 
-    QuePopF (que, &x);
+    QPopF (que, &x);
     printf ("%d\n", x);
 
-    QuePopF (que, &x);
+    QPopF (que, &x);
     printf ("%d\n", x);
 
-    QuePopF (que, &x);
+    QPopF (que, &x);
     printf ("%d\n", x);
     
-    QueDtor (que);
+    QDtor (que);
     return 0;
 }
