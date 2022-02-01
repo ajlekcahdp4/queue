@@ -4,9 +4,11 @@ typedef struct Queue
     unsigned int bp;
     unsigned int fp;
     int * data;
+    FILE* logfile;
 } Queue;
 
-void QueCtor(Queue* que, unsigned int capacity);
-void QueDtor (Queue* que);
-void QuePushB (Queue* que, int val);
-void QuePopF (Queue* que, int* dest);
+void QCtor(Queue* que, unsigned int capacity, char* Qname);
+void QDtor (Queue* que);
+void QPushB (Queue* que, int val);
+void QPopF (Queue* que, int* dest);
+int QCheck (Queue* que);
