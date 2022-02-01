@@ -1,6 +1,7 @@
 #include "queue.h"
 #include <stdio.h>
 #include <stdlib.h>
+
 void QueCtor(Queue* que, unsigned int capacity)
 {
     que->data = (int*)calloc (capacity, sizeof(int));
