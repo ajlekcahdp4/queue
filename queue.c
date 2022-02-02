@@ -57,8 +57,10 @@ int QCheck (Queue* que)
 void QResize (Queue* que, unsigned int capacity)
 {
     int* temp_data = (int*)calloc(que->capacity, sizeof(int));
-    memcpy (que->data, temp_data, que->capacity);
-    que->data = realloc (que->data, capacity);
+    int old_capacity = que->capacity;
+    memcpy (temp_data, que->data, old_capacity*sizeof(int));
+    que->capacity = capacity;
+    que->data = realloc (que->data, capacity * sizeof(int));
     int i = 0;
     while (i < capacity)
     {
@@ -66,8 +68,22 @@ void QResize (Queue* que, unsigned int capacity)
             que->data[i] = 0;
         else if (i >= que->bp)
             que->data[i] = 0;
+        i++;
     }
-    memcpy (temp_data, que->data, que->capacity);
-    que->capacity = capacity;
+    memcpy (que->data, temp_data, old_capacity*sizeof(int));
     free(temp_data);
+}
+
+void QDump (Queue* que)
+{
+    fprintf (que->logfile, "Dump: \n");
+    fprintf(que->logfile, "capacity = %u\n", que->capacity);
+    fprintf(que->logfile, "fp = %u\n", que->fp);
+    fprintf(que->logfile, "bp = %u\n", que->bp);
+    fprintf(que->logfile, "data = %p\n", que->data);
+    for (int i = 0; i < que->capacity; i++)
+    {
+        fprintf(que->logfile, "[%d] = %d\n", i, que->data[i]);
+    }
+    fprintf(que->logfile, "\n\n");
 }

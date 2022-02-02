@@ -16,3 +16,4 @@ void QPushB (Queue* que, int val);
 void QPopF (Queue* que, int* dest);
 int QCheck (Queue* que);
 void QResize (Queue* que, unsigned int capacity);
+void QDump (Queue* que);
