@@ -10,6 +10,7 @@ typedef struct Queue
     FILE* logfile;
 } Queue;
 
+
 void QCtor(Queue* que, unsigned int capacity, char* Qname);
 void QDtor (Queue* que);
 void QPushB (Queue* que, int val);
