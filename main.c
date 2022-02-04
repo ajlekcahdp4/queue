@@ -11,7 +11,17 @@ int main ()
     QPushB (que, 2);
     QPushB (que, 3);
     QPushB (que, 4);
-
+    QPushF (que, 11);
+    QDump (que);
+    QPopF (que, &x);
+    QPopF (que, &x);
+    QPopF (que, &x);
+    QPopF (que, &x);
+    QPopF (que, &x);
+    QDump (que);
+    QPopF (que, &x);
+    QDump (que);
+    /*
     QPopF (que, &x);
     printf ("%d\n", x);
 
@@ -23,6 +33,7 @@ int main ()
     
     QPopF (que, &x);
     printf ("%d\n", x);
+    */
     
     QDtor (que);
     return 0;
