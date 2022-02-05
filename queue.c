@@ -12,18 +12,23 @@ void QCtor(Queue* que, unsigned int capacity, char* Qname)
 
 void QPushB (Queue* que, int val)
 {
-    if (que->bp == que->capacity)
-        QBResize (que, 2*que->capacity);
-    que->data[que->bp] = val;
-    que->bp += 1;
     QCheck (que);
+    if ((que->bp - que->fp) % que->capacity == 0 && que->bp != 0)
+    {
+        QResize (que, 2*que->capacity);
+    }
+    que->data[que->bp] = val;
+    que->bp = (que->bp + 1) % que->capacity;
 }
 
 void QPushF (Queue* que, int val)
 {
-    if (que->fp == 0)
-        QFResize (que, 2*que->capacity);
-    que->fp -= 1;
+    if ((que->bp - que->fp) % que->capacity == 0 && que->bp != 0)
+    {
+        QResize (que, 2*que->capacity);
+    }
+    que->fp = (que->fp - 1 + que->capacity) % que->capacity;
+    printf("FP = %d\n", que->fp);
     que->data[que->fp] = val;
     QCheck (que);
 }
@@ -52,11 +57,6 @@ void QDtor (Queue* que)
 
 int QCheck (Queue* que)
 {
-    if (que->fp > que->bp)
-    {
-        fprintf(que->logfile, "ERROR: queue underflow\n");
-        return 1;
-    }
     if (que->fp < 0 )
     {
         fprintf (que->logfile, "ERROR: wrong front pointer\n");
@@ -70,47 +70,49 @@ int QCheck (Queue* que)
     return 0;
 }
 
-void QBResize (Queue* que, unsigned int capacity)
+void QResize (Queue* que, int capacity)
 {
-    int* temp_data = (int*)calloc(que->capacity, sizeof(int));
     int old_capacity = que->capacity;
-    memcpy (temp_data, que->data, old_capacity*sizeof(int));
-    que->capacity = capacity;
-    que->data = realloc (que->data, capacity * sizeof(int));
-    int i = 0;
-    while (i < capacity)
+    if (que->bp > que->fp)
     {
-        if (i < que->fp)
+        int* temp_data = (int*)calloc(que->capacity, sizeof(int));
+        memcpy (temp_data, que->data, que->capacity*sizeof(int));
+        
+        que->data = realloc (que->data, capacity * sizeof(int));
+        int i = 0;
+        while (i < capacity)
+        {
             que->data[i] = 0;
-        else if (i >= que->bp)
-            que->data[i] = 0;
-        i++;
+            i++;
+        }
+
+        memcpy (que->data, temp_data, que->capacity*sizeof(int));
+        que->capacity = capacity;
+        free(temp_data);
     }
-    memcpy (que->data, temp_data, old_capacity*sizeof(int));
-    free(temp_data);
-}
-
-void QFResize (Queue* que, unsigned int capacity)
-{
-    int* temp_data = (int*)calloc(que->capacity, sizeof(int));
-    int old_capacity = que->capacity;
-    memcpy (temp_data, que->data, old_capacity*sizeof(int));
-    que->capacity = capacity;
-
-    que->data = realloc (que->data, capacity * sizeof(int));
-
-    int i = 0;
-
-    while (i < capacity)
+    else if (que->bp == que->fp)
     {
-        que->data[i] = 0;
-        i++;
-    }
+        int* temp_data_b = (int*)calloc(que->capacity, sizeof(int));
+        int* temp_data_f = (int*)calloc(que->capacity, sizeof(int));
+        memcpy (temp_data_b, que->data, que->bp*sizeof(int));
+        memcpy (temp_data_f, que->data + que->fp, (que->capacity - que->fp)*sizeof(int));
+        
+        que->data = realloc (que->data, capacity * sizeof(int));
+        int i = 0;
+        while (i < capacity)
+        {
+            que->data[i] = 0;
+            i++;
+        }
 
-    memcpy (que->data + (capacity - old_capacity), temp_data, old_capacity*sizeof(int));
-    que->fp = capacity - old_capacity;
-    que->bp = capacity - old_capacity + que->bp;
-    free(temp_data);
+        memcpy (que->data, temp_data_b, que->bp*sizeof(int));
+        memcpy (que->data + (capacity - (que->capacity - que->fp)), temp_data_f, (que->capacity - que->fp)*sizeof(int));
+        que->fp = que->fp + capacity - que->capacity;
+        que->capacity = capacity;
+        printf("fp = %d\n", que->fp);
+        free (temp_data_b);
+        free (temp_data_f);
+    }
 }
 
 
@@ -123,7 +125,7 @@ void QDump (Queue* que)
     fprintf(que->logfile, "data = %p\n", que->data);
     for (int i = 0; i < que->capacity; i++)
     {
-        if (i >= que->fp && i < que->bp)
+        if ((i >= que->fp && i < que->bp) || (i >= que->fp && que->bp <= que->fp) || (i < que->bp &&  que->bp <= que->fp))
             fprintf(que->logfile, "*[%d] = %d\n", i, que->data[i]);
         else
             fprintf(que->logfile, " [%d] = %d\n", i, que->data[i]);
