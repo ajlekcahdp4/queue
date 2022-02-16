@@ -11,4 +11,6 @@ This function pop value from the head of the queue.
 This function pop value from the tail of the queue.
 ### QDump
 This function fill logfile with the dump of the queue.
-![]()
+<p align="center">
+<img src="https://github.com/ajlekcahdp4/queue/blob/main/examples_of_logfile/aft_circ.png">
+</p>
