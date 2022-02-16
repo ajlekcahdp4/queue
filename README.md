@@ -12,5 +12,5 @@ This function pop value from the tail of the queue.
 ### QDump
 This function fill logfile with the dump of the queue.
 <p align="center">
-<img src="https://imgur.com/a/UFRZ0ny">
+<img src="https://postimg.cc/BtpCwDtC">
 </p>
