@@ -6,7 +6,7 @@ int main ()
 {
     Queue *que = (Queue*)calloc(1, sizeof(Queue));
     int x = 0;
-    QCtor (que, 4, "first_que");
+    QCtor (que, 4, "first_que_logfile.txt");
     QPushB (que, 1);
     QDump (que);
     QPushB (que, 2);
@@ -25,7 +25,7 @@ int main ()
     QPopF (que, &x);
     QPopF (que, &x);
     QPopF (que, &x);
-    
+
     QDtor (que);
     return 0;
 }
