@@ -1,60 +1,81 @@
 #include "queue.h"
 
+enum ERRORS {ERR_QUEUE_ZERO_POINTER};
 
-void QCtor(Queue* que, unsigned int capacity, char* Qname)
+int QCtor(Queue* que, unsigned int capacity, char* Qname)
 {
+    if (que == 0)
+        return ERR_QUEUE_ZERO_POINTER;
     que->data = (int*)calloc (capacity, sizeof(int));
     que->capacity = capacity;
     que->bp = 0;
     que->fp = 0;
     que->logfile = fopen (Qname, "w");
+    return 0;
 }
 
-void QPushB (Queue* que, int val)
+int QPushB (Queue* que, int val)
 {
+    if (que == 0)
+        return ERR_QUEUE_ZERO_POINTER;
     if ((que->bp - que->fp) % que->capacity == 0 && que->bp != 0)
     {
         QResize (que, 2*que->capacity);
     }
     que->data[que->bp] = val;
     que->bp = (que->bp + 1) % que->capacity;
+    return 0;
 }
 
-void QPushF (Queue* que, int val)
+int QPushF (Queue* que, int val)
 {
+    if (que == 0)
+        return ERR_QUEUE_ZERO_POINTER;
     if ((que->bp - que->fp) % que->capacity == 0 && que->bp != 0)
     {
         QResize (que, 2*que->capacity);
     }
     que->fp = (que->fp - 1 + que->capacity) % que->capacity;
     que->data[que->fp] = val;
+    return 0;
 }
 
-void QPopF (Queue* que, int* dest)
+int QPopF (Queue* que, int* dest)
 {
+    if (que == 0)
+        return ERR_QUEUE_ZERO_POINTER;
     *dest = que->data[que->fp];
     que->data[que->fp] = 0;
     que->fp += 1;
+    return 0;
 }
-void QPopB (Queue* que, int* dest)
+
+int QPopB (Queue* que, int* dest)
 {
+    if (que == 0)
+        return ERR_QUEUE_ZERO_POINTER;
     *dest = que->data[que->bp];
     que->data[que->bp - 1] = 0;
     que->bp -= 1;
+    return 0;
 }
 
-void QDtor (Queue* que)
+int QDtor (Queue* que)
 {
+    if (que == 0)
+        return ERR_QUEUE_ZERO_POINTER;
     fclose (que->logfile);
     free (que->data);
     free (que);
+    return 0;
 }
 
 
-
-void QResize (Queue* que, int capacity)
+int QResize (Queue* que, int capacity)
 {
     //int old_capacity = que->capacity;
+    if (que == 0)
+        return ERR_QUEUE_ZERO_POINTER;
     if (que->bp > que->fp)
     {
         int* temp_data = (int*)calloc(que->capacity, sizeof(int));
@@ -94,11 +115,14 @@ void QResize (Queue* que, int capacity)
         free (temp_data_b);
         free (temp_data_f);
     }
+    return 0;
 }
 
 
-void QDump (Queue* que)
+int QDump (Queue* que)
 {
+    if (que == 0)
+        return ERR_QUEUE_ZERO_POINTER;
     fprintf (que->logfile, "Dump: \n");
     fprintf(que->logfile, "capacity = %u\n", que->capacity);
     fprintf(que->logfile, "fp = %u\n", que->fp);
@@ -113,4 +137,5 @@ void QDump (Queue* que)
         
     }
     fprintf(que->logfile, "\n\n");
+    return 0;
 }

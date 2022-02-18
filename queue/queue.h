@@ -11,13 +11,11 @@ typedef struct Queue
 } Queue;
 
 
-void QCtor(Queue* que, unsigned int capacity, char* Qname);
-void QDtor (Queue* que);
-void QPushB (Queue* que, int val);
-void QPushF (Queue* que, int val);
-void QPopF (Queue* que, int* dest);
-void QPopB (Queue* que, int* dest);
-void QResize (Queue* que, int capacity);
-void QBResize (Queue* que, unsigned int capacity);
-void QFResize (Queue* que, unsigned int capacity);
-void QDump (Queue* que);
+int QCtor(Queue* que, unsigned int capacity, char* Qname);
+int QDtor (Queue* que);
+int QPushB (Queue* que, int val);
+int QPushF (Queue* que, int val);
+int QPopF (Queue* que, int* dest);
+int QPopB (Queue* que, int* dest);
+int QResize (Queue* que, int capacity);
+int QDump (Queue* que);
